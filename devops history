@@ -1,0 +1,29 @@
+yum install -y java-1.8.0-openjdk-devel.x86_64
+
+maven:
+sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+sudo yum install -y apache-maven
+
+sonar:
+sudo wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
+sudo yum install sonar -y
+service sonar start
+
+ansible node:
+172.31.11.219 ansible_user=ec2-user ansible_connection=ssh ansible_ssh_private_key_file=/tmp/2024.pem
+172.31.9.140 ansible_user=ec2-user ansible_connection=ssh ansible_ssh_private_key_file=/tmp/2024.pem
+
+nexus:
+cd /opt/
+
+sudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gzsudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+
+cd nexus3/
+cd bin
+vi nexus.rc
+ln -s /opt/nexus3/bin/nexus /etc/init.d/nexus
+cd /etc/init.d/
+ chkconfig --add nexus
+ chkconfig nexus on
+sudo service nexus start
