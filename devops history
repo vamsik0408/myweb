@@ -27,3 +27,7 @@ cd /etc/init.d/
  chkconfig --add nexus
  chkconfig nexus on
 sudo service nexus start
+
+docker:
+sudo usermod -aG docker jenkins
+chmod 777 /var/run/docker.sock
